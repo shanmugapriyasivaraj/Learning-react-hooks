@@ -58,22 +58,72 @@
 
 // export default App;
 
-import React, { useState } from "react";
+// import React, { useState } from "react";
+// import "./App.css";
+// import CComponent from "../src/UseEffect/CComponent";
+// import FComponent from "../src/UseEffect/FComponent";
+
+// function App() {
+//   const [flag, setFlag] = useState(true);
+
+//   return (
+//     <div className="App">
+//       <div>
+//         <button onClick={() => setFlag(!flag)}>Toggle class component </button>
+//       </div>
+//       {flag ? <FComponent /> : ""}
+//     </div>
+//   );
+// }
+
+// export default App;
+
+import React, { useState, useRef, useEffect } from "react";
 import "./App.css";
-import CComponent from "../src/UseEffect/CComponent";
-import FComponent from "../src/UseEffect/FComponent";
 
 function App() {
-  const [flag, setFlag] = useState(true);
+  const [name, setName] = useState("");
+  const [count, setCount] = useState(0);
+  const inputElement = useRef("");
+  const previousCountRef = useRef("");
+
+  console.log(inputElement);
+
+  useEffect(() => {
+    previousCountRef.current = count;
+  }, [count]);
+
+  const resetInput = () => {
+    setName("");
+    inputElement.current.focus();
+    console.log(inputElement.current.value);
+    inputElement.current.value = "priya";
+  };
 
   return (
     <div className="App">
       <div>
-        <button onClick={() => setFlag(!flag)}>Toggle class component </button>
+        <input
+          ref={inputElement}
+          name="name"
+          autoComplete="off"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        ></input>
+        <button onClick={resetInput}>Reset</button>
       </div>
-      {flag ? <FComponent /> : ""}
+      <div>My name is {name}</div>
+      <div>
+        <h1>Random Counter:{count}</h1>
+        {typeof previousCountRef.current !== "undefined" && (
+          <h2>Previous Count : {previousCountRef.current}</h2>
+        )}
+        <button onClick={(e) => setCount(Math.ceil(Math.random() * 100))}>
+          Generate Number
+        </button>
+      </div>
     </div>
   );
 }
-
 export default App;
