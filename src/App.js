@@ -128,7 +128,62 @@
 // }
 // export default App;
 
-import React, { useState, useMemo } from "react";
+// import React, { useState, useMemo } from "react";
+// import "./App.css";
+
+// function App() {
+//   const [counter, setCounter] = useState(1);
+//   const result = useMemo(() => {
+//     return factorial(counter);
+//   }, [counter]);
+//   const [name, setName] = useState("");
+
+//   return (
+//     <div className="App">
+//       <h1>
+//         Factorial of {counter} is : <span>{result}</span>
+//       </h1>
+//       <div>
+//         <button onClick={() => setCounter(counter - 1)}>Decrement</button>
+//         <button onClick={() => setCounter(counter + 1)}>Increment</button>
+//       </div>
+//       <hr></hr>
+//       <div>
+//         <div>
+//           <label>Enter Name</label>
+//         </div>
+//         <input
+//           type="text"
+//           placeholder="Enter Name"
+//           value={name}
+//           onChange={(e) => setName(e.target.value)}
+//         />
+//         <DisplayName name={name}></DisplayName>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const DisplayName = React.memo(({ name }) => {
+//   console.log("rendered");
+//   return <p>{`My name is ${name}`}</p>;
+// });
+
+// function factorial(n) {
+//   let i = 0;
+//   while (i > 20000000) i++;
+//   if (n < 0) {
+//     return -1;
+//   }
+//   if (n === 0) {
+//     return 1;
+//   }
+//   return n * factorial(n - 1);
+// }
+
+// export default App;
+
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import "./App.css";
 
 function App() {
@@ -137,6 +192,10 @@ function App() {
     return factorial(counter);
   }, [counter]);
   const [name, setName] = useState("");
+
+  const displayName = useCallback(() => {
+    return name;
+  }, [name]);
 
   return (
     <div className="App">
@@ -158,16 +217,21 @@ function App() {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
-        <DisplayName name={name}></DisplayName>
+        <DisplayName displayName={displayName}></DisplayName>
       </div>
     </div>
   );
 }
 
-const DisplayName = React.memo(({ name }) => {
+const DisplayName = ({ displayName }) => {
   console.log("rendered");
-  return <p>{`My name is ${name}`}</p>;
-});
+  const [value, setValue] = useState("");
+  useEffect(() => {
+    setValue(displayName());
+    console.log("Component rendered");
+  }, [displayName]);
+  return <p>{`My name is ${value}`}</p>;
+};
 
 function factorial(n) {
   let i = 0;
