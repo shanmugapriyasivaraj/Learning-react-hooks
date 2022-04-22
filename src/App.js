@@ -78,52 +78,107 @@
 
 // export default App;
 
-import React, { useState, useRef, useEffect } from "react";
+// import React, { useState, useRef, useEffect } from "react";
+// import "./App.css";
+
+// function App() {
+//   const [name, setName] = useState("");
+//   const [count, setCount] = useState(0);
+//   const inputElement = useRef("");
+//   const previousCountRef = useRef("");
+
+//   console.log(inputElement);
+
+//   useEffect(() => {
+//     previousCountRef.current = count;
+//   }, [count]);
+
+//   const resetInput = () => {
+//     setName("");
+//     inputElement.current.focus();
+//     console.log(inputElement.current.value);
+//     inputElement.current.value = "priya";
+//   };
+
+//   return (
+//     <div className="App">
+//       <div>
+//         <input
+//           ref={inputElement}
+//           name="name"
+//           autoComplete="off"
+//           type="text"
+//           value={name}
+//           onChange={(e) => setName(e.target.value)}
+//         ></input>
+//         <button onClick={resetInput}>Reset</button>
+//       </div>
+//       <div>My name is {name}</div>
+//       <div>
+//         <h1>Random Counter:{count}</h1>
+//         {typeof previousCountRef.current !== "undefined" && (
+//           <h2>Previous Count : {previousCountRef.current}</h2>
+//         )}
+//         <button onClick={(e) => setCount(Math.ceil(Math.random() * 100))}>
+//           Generate Number
+//         </button>
+//       </div>
+//     </div>
+//   );
+// }
+// export default App;
+
+import React, { useState, useMemo } from "react";
 import "./App.css";
 
 function App() {
+  const [counter, setCounter] = useState(1);
+  const result = useMemo(() => {
+    return factorial(counter);
+  }, [counter]);
   const [name, setName] = useState("");
-  const [count, setCount] = useState(0);
-  const inputElement = useRef("");
-  const previousCountRef = useRef("");
-
-  console.log(inputElement);
-
-  useEffect(() => {
-    previousCountRef.current = count;
-  }, [count]);
-
-  const resetInput = () => {
-    setName("");
-    inputElement.current.focus();
-    console.log(inputElement.current.value);
-    inputElement.current.value = "priya";
-  };
 
   return (
     <div className="App">
+      <h1>
+        Factorial of {counter} is : <span>{result}</span>
+      </h1>
       <div>
+        <button onClick={() => setCounter(counter - 1)}>Decrement</button>
+        <button onClick={() => setCounter(counter + 1)}>Increment</button>
+      </div>
+      <hr></hr>
+      <div>
+        <div>
+          <label>Enter Name</label>
+        </div>
         <input
-          ref={inputElement}
-          name="name"
-          autoComplete="off"
           type="text"
+          placeholder="Enter Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-        ></input>
-        <button onClick={resetInput}>Reset</button>
-      </div>
-      <div>My name is {name}</div>
-      <div>
-        <h1>Random Counter:{count}</h1>
-        {typeof previousCountRef.current !== "undefined" && (
-          <h2>Previous Count : {previousCountRef.current}</h2>
-        )}
-        <button onClick={(e) => setCount(Math.ceil(Math.random() * 100))}>
-          Generate Number
-        </button>
+        />
+        <DisplayName name={name}></DisplayName>
       </div>
     </div>
   );
 }
+
+const DisplayName = React.memo(({ name }) => {
+  console.log("rendered");
+  return <p>{`My name is ${name}`}</p>;
+});
+
+function factorial(n) {
+  let i = 0;
+  while (i > 20000000) i++;
+  if (n < 0) {
+    return -1;
+  }
+  if (n === 0) {
+    return 1;
+  }
+  return n * factorial(n - 1);
+}
+
 export default App;
