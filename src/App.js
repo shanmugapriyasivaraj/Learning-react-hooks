@@ -183,66 +183,98 @@
 
 // export default App;
 
-import React, { useState, useMemo, useEffect, useCallback } from "react";
+// import React, { useState, useMemo, useEffect, useCallback } from "react";
+// import "./App.css";
+
+// function App() {
+//   const [counter, setCounter] = useState(1);
+//   const result = useMemo(() => {
+//     return factorial(counter);
+//   }, [counter]);
+//   const [name, setName] = useState("");
+
+//   const displayName = useCallback(() => {
+//     return name;
+//   }, [name]);
+
+//   return (
+//     <div className="App">
+//       <h1>
+//         Factorial of {counter} is : <span>{result}</span>
+//       </h1>
+//       <div>
+//         <button onClick={() => setCounter(counter - 1)}>Decrement</button>
+//         <button onClick={() => setCounter(counter + 1)}>Increment</button>
+//       </div>
+//       <hr></hr>
+//       <div>
+//         <div>
+//           <label>Enter Name</label>
+//         </div>
+//         <input
+//           type="text"
+//           placeholder="Enter Name"
+//           value={name}
+//           onChange={(e) => setName(e.target.value)}
+//         />
+//         <DisplayName displayName={displayName}></DisplayName>
+//       </div>
+//     </div>
+//   );
+// }
+
+// const DisplayName = ({ displayName }) => {
+//   console.log("rendered");
+//   const [value, setValue] = useState("");
+//   useEffect(() => {
+//     setValue(displayName());
+//     console.log("Component rendered");
+//   }, [displayName]);
+//   return <p>{`My name is ${value}`}</p>;
+// };
+
+// function factorial(n) {
+//   let i = 0;
+//   while (i > 20000000) i++;
+//   if (n < 0) {
+//     return -1;
+//   }
+//   if (n === 0) {
+//     return 1;
+//   }
+//   return n * factorial(n - 1);
+// }
+
+// export default App;
+
+import React, { useState } from "react";
 import "./App.css";
+import CComponent from "./UseEffect/CComponent";
+import { CounterContext } from "./UseEffect/CreateContext";
+import FComponent from "./UseEffect/FComponent";
 
 function App() {
-  const [counter, setCounter] = useState(1);
-  const result = useMemo(() => {
-    return factorial(counter);
-  }, [counter]);
-  const [name, setName] = useState("");
-
-  const displayName = useCallback(() => {
-    return name;
-  }, [name]);
-
+  const [counter, setCounter] = useState(0);
+  const increment = () => {
+    setCounter(counter + 1);
+  };
+  const decrement = () => {
+    setCounter(counter - 1);
+  };
   return (
-    <div className="App">
-      <h1>
-        Factorial of {counter} is : <span>{result}</span>
-      </h1>
-      <div>
-        <button onClick={() => setCounter(counter - 1)}>Decrement</button>
-        <button onClick={() => setCounter(counter + 1)}>Increment</button>
-      </div>
+    <div className="App border">
+      <h1>App Component</h1>
+      <h2>{counter}</h2>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
       <hr></hr>
-      <div>
-        <div>
-          <label>Enter Name</label>
-        </div>
-        <input
-          type="text"
-          placeholder="Enter Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <DisplayName displayName={displayName}></DisplayName>
-      </div>
+      <CounterContext.Provider value={counter}>
+        <FComponent />
+        <hr></hr>
+        <CComponent />
+      </CounterContext.Provider>
     </div>
   );
-}
-
-const DisplayName = ({ displayName }) => {
-  console.log("rendered");
-  const [value, setValue] = useState("");
-  useEffect(() => {
-    setValue(displayName());
-    console.log("Component rendered");
-  }, [displayName]);
-  return <p>{`My name is ${value}`}</p>;
-};
-
-function factorial(n) {
-  let i = 0;
-  while (i > 20000000) i++;
-  if (n < 0) {
-    return -1;
-  }
-  if (n === 0) {
-    return 1;
-  }
-  return n * factorial(n - 1);
 }
 
 export default App;
